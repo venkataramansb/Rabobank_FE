@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="uploadContainer">
+    <form class="example-form">
+      <input type="file" class="fileUpload" (change)="onFileInput($event.target.files)" accept=".csv"/>
+    </form>
+  </div>
+  <div class="noDataContainer" *ngIf="dataEmpty()">
+    Please select the proper CSV for loading the table
+  </div>
+  <div class="tableContainer" *ngIf="!dataEmpty()">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value, 'Issue count')" placeholder="Filter By Issue Count">
+    </mat-form-field>
+
+    <table mat-table [dataSource]="contentsToDisplay" class="mat-elevation-z8">
+      <ng-container *ngFor='let c of config' matColumnDef="{{c.column}}">
+        <th mat-header-cell *matHeaderCellDef>{{c.column}}</th>
+        <td mat-cell *matCellDef="let element"> {{c.transform(element[c.column])}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns();"></tr>
+    </table>
+  </div>
+</div>
+
